@@ -1,0 +1,97 @@
+<!-- templates/edit_user.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User - TriQuadVroom</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <h1>Edit User - TriQuadVroom</h1>
+            <nav class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="/admin_home">Home</a></li>
+                    <li><a href="/ride_monitoring">Dashboard</a></li>
+                    <li><a href="/issue_management">Issues</a></li>
+                    <li><a href="/login">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="content">
+        <div class="box">
+            <h2>Edit User</h2>
+            <form method="POST" action="">
+                <input type="hidden" name="role" value="{{ user.role }}">
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone_number">Mobile Number</label>
+                    <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ user.phone_number }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" class="form-control" value="{{ user.dob }}" required>
+                </div>
+
+                <!-- Additional fields for Driver -->
+                {% if user.role == 'driver' %}
+                <div class="form-group">
+                    <label for="vehicle_type">Vehicle Type</label>
+                    <input type="text" id="vehicle_type" name="vehicle_type" class="form-control" value="{{ user.vehicle_type }}">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle_reg_number">Vehicle Registration Number</label>
+                    <input type="text" id="vehicle_reg_number" name="vehicle_reg_number" class="form-control" value="{{ user.vehicle_reg_number }}">
+                </div>
+                <div class="form-group">
+                    <label for="license_number">License Number</label>
+                    <input type="text" id="license_number" name="license_number" class="form-control" value="{{ user.license_number }}">
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for('admin_home') }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="/aboutus">About Us</a>
+                <a href="/contactus">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Help</h4>
+                <a href="/help_and_support">Help and Support</a>
+                <a href="/affiliate">Affiliate</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/terms">Terms</a>
+                <a href="/privacy_policy">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2024 TriQuadVroom, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

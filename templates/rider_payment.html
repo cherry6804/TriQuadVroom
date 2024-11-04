@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TriQuadVroom - Rider Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <h1>TriQuadVroom</h1>
+            <nav class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="/rider_search">Search for Ride</a></li>
+                    <li><a href="/rider_ride_history">Ride history</a></li>
+                    <li><a href="#">Notifications</a></li>
+                    <li><a href="/rider_home"><i class="fas fa-user"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="content">
+        <h2>Payment for Your Ride</h2>
+        <div class="fare-box">
+            <h3>Fare Amount</h3>
+            <p><strong>₹{{ fare }}</strong></p>
+        </div>
+
+        <p>Please select your payment option:</p>
+        <form action="/process_payment" method="POST">
+            <input type="hidden" name="ride_id" value="{{ ride.ride_id if ride else '' }}">
+            <div class="form-group">
+                <label for="payment_option">Payment Method:</label>
+                <select name="payment_option" id="payment_option" class="form-control" required>
+                    <option value="" disabled selected>Select a payment method</option>
+                    <option value="debit_card">Debit/Credit Card</option>
+                    <option value="upi">UPI</option>
+                </select>
+            </div>
+
+            <div id="card_details" style="display: none;">
+                <h4>Debit/Credit Card Details</h4>
+                <div class="form-group">
+                    <label for="card_number">Card Number:</label>
+                    <input type="text" name="card_number" id="card_number" class="form-control" required pattern="\d{16}" title="Enter a 16-digit card number" maxlength="16" aria-describedby="cardNumberHelp">
+                    <small id="cardNumberHelp" class="form-text text-muted">Enter a 16-digit card number.</small>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="card_holder">Card Holder Name:</label>
+                        <input type="text" name="card_holder" id="card_holder" class="form-control" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="expiry_date">Expiry Date:</label>
+                        <input type="text" name="expiry_date" id="expiry_date" class="form-control" placeholder="MM/YY" required pattern="^(0[1-9]|1[0-2])\/[0-9]{2}$" title="Enter expiry date in MM/YY format (MM: 01-12, YY: 00-99)">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="cvv">CVV:</label>
+                        <input type="text" name="cvv" id="cvv" class="form-control" required pattern="\d{3}" title="Enter a 3-digit CVV" maxlength="3">
+                    </div>
+                </div>
+            </div>
+
+            <div id="upi_details" style="display: none;">
+                <h4>Select UPI App</h4>
+                <p>Please select your UPI app:</p>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <button type="button" onclick="location.href='/process_upi_payment/google_pay/{{ ride_id }}/{{ fare }}'" class="upi-link btn btn-link">Google Pay</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button type="button" onclick="location.href='/process_upi_payment/phonepe/{{ ride_id }}/{{ fare }}'" class="upi-link btn btn-link">PhonePe</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button type="button" onclick="location.href='/process_upi_payment/paytm/{{ ride_id }}/{{ fare }}'" class="upi-link btn btn-link">Paytm</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button type="button" onclick="location.href='/process_upi_payment/bhim/{{ ride_id }}/{{ fare }}'" class="upi-link btn btn-link">BHIM</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button type="button" onclick="location.href='/process_upi_payment/amazon_pay/{{ ride_id }}/{{ fare }}'" class="upi-link btn btn-link">Amazon Pay</button>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="btn btn-success">Proceed to Pay</button>
+        </form>
+    </section>
+
+    <style>
+        .fare-box {
+            border: 1px solid #28a745;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #e9fce9;
+        }
+    </style>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="/aboutus">About Us</a>
+                <a href="/contactus">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Help</h4>
+                <a href="/help_and_support">Help and Support</a>
+                <a href="/affiliate">Affiliate</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/terms">Terms</a>
+                <a href="/privacy_policy">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2024 TriQuadVroom, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#payment_option').change(function() {
+                if ($(this).val() == 'debit_card') {
+                    $('#card_details').show();
+                    $('#upi_details').hide();
+                } else if ($(this).val() == 'upi') {
+                    $('#upi_details').show();
+                    $('#card_details').hide();
+                } else {
+                    $('#card_details').hide();
+                    $('#upi_details').hide();
+                }
+            });
+
+            // Automatically format the expiry date input
+            $('#expiry_date').on('input', function() {
+                var value = $(this).val().replace(/\D/g, ''); // Remove all non-digit characters
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                } else if (value.length === 1) {
+                    value = '0' + value; // Add leading zero for single-digit month
+                }
+                $(this).val(value);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TriQuadVroom - Request Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <h1>TriQuadVroom</h1>
+            <nav class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="/post">Post a ride</a></li>
+                    <li><a href="/driver_ride_requests">Ride Requests</a></li>
+                    <li><a href="/driver_ride_history">Ride history</a></li>
+                    <li><a href="#">Notifications</a></li>
+                    <li><a href="/driver_home"><i class="fas fa-user"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="content">
+        <h2>Request Details</h2>
+        <div class="box mb-3 border p-3">
+            <p><strong>Rider Name:</strong> {{ request.rider_name }}</p>
+            <p><strong>Rider Email:</strong> {{ request.rider_email }}</p>
+            <p><strong>Rider Mobile:</strong> {{ request.rider_mobile }}</p>
+            <p><strong>Pickup Location:</strong> {{ request.from_location }}</p>
+            <p><strong>Dropoff Location:</strong> {{ request.to_location }}</p>
+            <p><strong>Status:</strong> {{ request.status }}</p>
+
+            {% if request.status == 'pending' %}
+                <form action="{{ url_for('handle_request', request_id=request.request_id, action='accept') }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-success">Accept</button>
+                </form>
+                <form action="{{ url_for('handle_request', request_id=request.request_id, action='reject') }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Reject</button>
+                </form>
+            {% endif %}
+            
+            <a href="/driver_ride_requests" class="btn btn-secondary">Back to Requests</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="/aboutus">About Us</a>
+                <a href="/contactus">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Help</h4>
+                <a href="/help_and_support">Help and Support</a>
+                <a href="/affiliate">Affiliate</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/terms">Terms</a>
+                <a href="/privacy_policy">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2024 TriQuadVroom, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

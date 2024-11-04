@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <h1>TriQuadVroom</h1>
+            <nav class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="/rider_search">Search for Ride</a></li>
+                    <li><a href="/rider_ride_history">Ride history</a></li>
+                    <li><a href="#">Notifications</a></li>
+                    <li><a href="/rider_home"><i class="fas fa-user"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="content">
+        <div class="box">
+            <h2>{{ message }}</h2>
+            <div class="row">
+                {% if rides %}
+                    {% for ride in rides %}
+                    <div class="col-md-6 mb-4">  <!-- Individual ride container -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Ride ID: {{ ride.ride_id }}</h5>
+                                <p class="card-text"><strong>From:</strong> {{ ride.from_location }}</p>
+                                <p class="card-text"><strong>To:</strong> {{ ride.to_location }}</p>
+                                <p class="card-text"><strong>Date:</strong> {{ ride.date }}</p>
+                                <p class="card-text"><strong>Time:</strong> {{ ride.time }}</p>
+                                <p class="card-text"><strong>Fare:</strong> ₹{{ ride.fare }}</p>
+                                
+                                <!-- Driver details -->
+                                <p class="card-text"><strong>Driver:</strong> {{ ride.driver_name }}</p>
+                                <p class="card-text"><strong>Contact:</strong> {{ ride.driver_contact }}</p>
+                                <p class="card-text"><strong>Email:</strong> {{ ride.driver_email }}</p>
+                                <p class="card-text"><strong>Vehicle:</strong> {{ ride.vehicle_details }}</p>
+                                
+                                <a href="{{ url_for('rider_ride_details', ride_id=ride.ride_id) }}" class="btn btn-primary">View Details</a>
+                            </div>                        
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="col-md-12">
+                    <p>No rides found.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="/aboutus">About Us</a>
+                <a href="/contactus">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Help</h4>
+                <a href="/help_and_support">Help and Support</a>
+                <a href="/affiliate">Affiliate</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/terms">Terms</a>
+                <a href="/privacy_policy">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2024 TriQuadVroom, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

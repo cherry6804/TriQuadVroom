@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Trip Details - TriQuadVroom</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <h1>TriQuadVroom</h1>
+            <nav class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="/rider_search">Search for Ride</a></li>
+                    <li><a href="/rider_ride_history">Ride History</a></li>
+                    <li><a href="#">Notifications</a></li>
+                    <li><a href="/rider_home"><i class="fas fa-user"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="content">
+        <div class="box">
+            <h2>Trip Details</h2>
+            <h4>Ride From: {{ ride.from_location }} To: {{ ride.to_location }}</h4>
+            <h5>Date: {{ ride.date }} | Time: {{ ride.time }}</h5>
+
+            <h4>Driver Information</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Driver Name</th>
+                        <th>Fare</th>
+                        <th>Feedback</th>
+                        <th>Payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ driver_info.driver_name }}</td>
+                        <td>₹{{ driver_info.fare }}</td>
+                        <td>
+                            {% if feedback_submitted %}
+                            <span class="text-success">Feedback Submitted</span>
+                            {% else %}
+                                <a href="{{ url_for('driver_feedback', ride_id=ride.ride_id, driver_id=ride.driver_id) }}" class="btn btn-warning">Submit Feedback</a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if ride.status == 'completed' %}
+                                <span class="text-success">Paid</span>
+                            {% else %}
+                                {% if feedback_submitted %}
+                                    <a href="{{ url_for('rider_payment', ride_id=ride.ride_id, driver_id=ride.driver_id) }}" class="btn btn-primary">Payment</a>
+                                {% else %}
+                                    <button class="btn btn-secondary" disabled>Feedback required first</button>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Ride Status: {{ ride_status }}</h4>
+            <p>
+                {% if ride_status == 'Completed' %}
+                    Both feedback and payment are completed. Thank you!
+                {% else %}
+                    Please complete feedback and payment to finalize the ride.
+                {% endif %}
+            </p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="/aboutus">About Us</a>
+                <a href="/contactus">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Help</h4>
+                <a href="/help_and_support">Help and Support</a>
+                <a href="/affiliate">Affiliate</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/terms">Terms</a>
+                <a href="/privacy_policy">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2024 TriQuadVroom, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Payment - TriQuadVroom</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <h1>TriQuadVroom</h1>
+            <nav class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="/post">Post a ride</a></li>
+                    <li><a href="/driver_ride_requests">Ride Requests</a></li>
+                    <li><a href="/driver_ride_history">Ride history</a></li>
+                    <li><a href="#">Notifications</a></li>
+                    <li><a href="/driver_home"><i class="fas fa-user"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="content">
+        <div class="box">
+            <h2>Payment for Your Ride</h2>
+            {% if fare is not none %}
+                <p>Your fare is: <strong>₹{{ fare }}</strong></p>
+            {% else %}
+                <p>Fare not found for this ride.</p>
+            {% endif %}
+            <form action="/confirm_payment" method="POST">
+                <input type="hidden" name="ride_id" value="{{ ride_id }}">
+                <button type="submit" class="btn btn-success">Mark Payment as Done</button>
+            </form>
+            
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2024 TriQuadVroom, Inc. All rights reserved.</p>
+    </footer>
+</body>
+</html>

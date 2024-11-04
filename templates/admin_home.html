@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management - TriQuadVroom</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <h1>TriQuadVroom</h1>
+            <nav class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="/admin_home">Home</a></li>
+                    <li><a href="/ride_monitoring">Dashboard</a></li>
+                    <li><a href="/issue_management">Issues</a></li>
+                    <li><a href="/login">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="content">
+        <div class="box">
+            <h2>Manage Users</h2>
+            <a href="{{ url_for('add_user') }}" class="btn btn-primary mb-3">Add User</a>
+
+            <!-- Search and Filter Section -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <input type="text" id="search-bar" class="form-control" placeholder="Search...">
+                <select id="role-filter" class="form-control ml-2">
+                    <option value="">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="rider">Rider</option>
+                    <option value="driver">Driver</option>
+                </select>
+            </div>
+
+            <!-- User Table -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>User ID</th> <!-- Added User ID column -->
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                    {% for user in users %}
+                        <tr class="user-row" data-role="{{ user.role }}">
+                            <td>{{ user.user_id }}</td> <!-- Display User ID -->
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone_number }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>
+                                <a href="/edit_user/{{ user.user_id }}" class="btn btn-sm btn-warning">Edit</a>
+                                <form action="/delete_user/{{ user.user_id }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="pagination mt-3 d-flex justify-content-center">
+                {% if page > 1 %}
+                    <a href="{{ url_for('admin_home', page=page - 1) }}" class="btn btn-light mr-2">Prev</a>
+                {% endif %}
+                <span class="btn btn-primary">{{ page }}</span>
+                {% if has_next_page %}
+                    <a href="{{ url_for('admin_home', page=page + 1) }}" class="btn btn-light ml-2">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="/aboutus">About Us</a>
+                <a href="/contactus">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Help</h4>
+                <a href="/help_and_support">Help and Support</a>
+                <a href="/affiliate">Affiliate</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/terms">Terms</a>
+                <a href="/privacy_policy">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2024 TriQuadVroom, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('search-bar').addEventListener('input', function() {
+            filterUsers();
+        });
+
+        document.getElementById('role-filter').addEventListener('change', function() {
+            filterUsers();
+        });
+
+        function filterUsers() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const roleFilter = document.getElementById('role-filter').value;
+            const rows = document.querySelectorAll('.user-row');
+
+            rows.forEach(row => {
+                const userID = row.cells[0].textContent.toLowerCase(); // User ID for filtering
+                const name = row.cells[1].textContent.toLowerCase();
+                const email = row.cells[2].textContent.toLowerCase();
+                const phone = row.cells[3].textContent.toLowerCase(); // Adjusted index for phone number
+                const role = row.getAttribute('data-role');
+
+                const matchesSearch = userID.includes(searchQuery) || name.includes(searchQuery) || email.includes(searchQuery) || phone.includes(searchQuery);
+                const matchesRole = roleFilter === "" || role === roleFilter;
+
+                row.style.display = matchesSearch && matchesRole ? "" : "none";
+            });
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
